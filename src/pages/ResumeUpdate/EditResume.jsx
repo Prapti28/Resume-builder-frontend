@@ -48,7 +48,7 @@ const EditResume = () => {
         title: "",
         thumbnailLink: "",
         profileInfo: {
-            profileImg: null,
+           // profileImg: null,
             profilePreviewUrl: "",
             fullName: "",
             designation: "",
@@ -480,10 +480,10 @@ const EditResume = () => {
                 `resume-${resumeId}.png`
             );
 
-            const profileImageFile = resumeData?.profileInfo?.profileImg || null;
+            //const profileImageFile = resumeData?.profileInfo?.profileImg || null;
 
             const formData = new FormData();
-            if (profileImageFile) formData.append("profileImage", profileImageFile);
+            //if (profileImageFile) formData.append("profileImage", profileImageFile);
             if(thumbnailFile) formData.append("thumbnail", thumbnailFile);
 
             const uploadResponse = await axiosInstance.put(
@@ -492,47 +492,47 @@ const EditResume = () => {
                 {headers: {"Content-Type" : "multipart/form-data"}}
             );
 
-            const {thumbnailLink, profilePreviewUrl} = uploadResponse.data;
+            const {thumbnailLink} = uploadResponse.data;
 
             console.log("RESUME_DATA__", resumeData);
 
-            await updateResumeDetails(thumbnailLink, profilePreviewUrl);
+            await updateResumeDetails(thumbnailLink);
 
-            toast.success("Resume Updated Successfully!");
+            
             navigate("/dashboard");
         }catch(error){
             //console.error("Error uploading images:", error);
-            console.log(error.response?.data);
-            toast.error("Failed to upload images");
+            console.log(error.response?.data || error.message);
+            toast.error("Failed to upload thumbnail");
         }finally{
             setIsLoading(false);
         }
     };
 
-    const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => {
-        try{
-            //console.log("Sending certifications:", resumeData.certifications);
-            //console.log("Saving template:", resumeData.template); // ✅ DEBUG
+    const updateResumeDetails = async (thumbnailLink) => {
+    setIsLoading(true);
+    try {
+        const updatedData = {
+            ...resumeData,
+            ...(thumbnailLink && { thumbnailLink }),
+        };
 
-            setIsLoading(true);
+        const response = await axiosInstance.put(
+            API_PATHS.RESUME.UPDATE(resumeId),
+            updatedData
+        );
 
-            const response = await axiosInstance.put(
-                API_PATHS.RESUME.UPDATE(resumeId),
-                {
-                    ...resumeData,
-                    thumbnailLink: thumbnailLink || "",
-                    profileInfo: {
-                        ...resumeData.profileInfo,
-                        profilePreviewUrl: profilePreviewUrl || "",
-                    },
-                }
-            );
-        } catch (err) {
-            console.error("Error capturing image:", err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        toast.success("Resume updated successfully.");
+        return response.data;
+    } catch (err) {
+        console.error("Error updating resume:", err);
+        toast.error("Failed to update resume.");
+        return null;
+    } finally {
+        setIsLoading(false);
+    }
+};
+
 
     //Delete resume
     const handleDeleteResume = async () => {

@@ -43,7 +43,7 @@ export const themeColorPalette = {
 
 export const DUMMY_RESUME_DATA = {
     profileInfo: {
-        profileImg: null,
+        //profileImg: null,
         previewUrl: "",
         fullName: "John Doe",
         designation: "Senior Software Engineer",

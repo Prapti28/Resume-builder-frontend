@@ -1,5 +1,4 @@
 import React from "react";
-import ProfilePhotoSelector from "../../../components/Inputs/ProfilePhotoSelector";
 import Input from "../../../components/Inputs/Input";
                     
 const ProfileInfoForm = ({profileData, updateSection,}) => {
@@ -10,12 +9,7 @@ const ProfileInfoForm = ({profileData, updateSection,}) => {
             </h2>
 
             <div className="mt-4">
-                <ProfilePhotoSelector
-                 image={profileData?.profileImg || profileData?.profilePreviewUrl}
-                 setImage={(value) => updateSection("profileImg", value)}
-                 preview={profileData?.profilePreviewUrl}
-                 setPreview={(value) => updateSection("profilePreviewUrl", value)}
-                />
+                
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input

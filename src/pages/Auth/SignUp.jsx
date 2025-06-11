@@ -2,14 +2,14 @@ import React, { useState, useContext } from "react";
 import Input from "../../components/Inputs/Input";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
-import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
+//import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
-import uploadImage from "../../utils/uploadImage";
+//import uploadImage from "../../utils/uploadImage";
 
 const SignUp = ({setCurrentPage}) => {
-    const [profilePic, setProfilePic] = useState(null);
+    //const [profilePic, setProfilePic] = useState(null);
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -23,7 +23,7 @@ const SignUp = ({setCurrentPage}) => {
     const handleSignUp = async (e) => {
         e.preventDefault();
 
-        let profileImageUrl = "";
+        //let profileImageUrl = "";
 
         if(!fullName) {
             setError("Please enter full name.");
@@ -46,15 +46,12 @@ const SignUp = ({setCurrentPage}) => {
         try{
 
             //upload image
-            if (profilePic){
-                const imgUploadRes = await uploadImage(profilePic);
-                profileImageUrl = imgUploadRes.imageUrl || "";
-            }
+            
             const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
                 name : fullName,
                 email,
                 password,
-                profileImageUrl,
+                //profileImageUrl,
             });
 
             const { token } = response.data;
@@ -62,7 +59,7 @@ const SignUp = ({setCurrentPage}) => {
             if (token) {
                 localStorage.setItem("token", token);
                 updateUser(response.data);
-                navigate("/dasboard");
+                navigate("/dashboard");
             }
         }catch(error){
             if(error.response && error.response.data.message) {
@@ -82,7 +79,7 @@ const SignUp = ({setCurrentPage}) => {
 
             <form onSubmit={handleSignUp}>
 
-                <ProfilePhotoSelector image={profilePic} setImage={setProfilePic}/>
+                
 
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
                     <Input
